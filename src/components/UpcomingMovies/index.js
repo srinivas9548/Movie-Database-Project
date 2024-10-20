@@ -1,5 +1,9 @@
 import {Component} from 'react'
 
+import Loader from 'react-loader-spinner'
+
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+
 import Header from '../Header'
 import MovieCard from '../MovieCard'
 
@@ -11,6 +15,7 @@ class UpcomingMovies extends Component {
     isMenubarOpen: false,
     isSearchOpen: false,
     searchInput: '',
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -40,7 +45,7 @@ class UpcomingMovies extends Component {
       voteCount: eachResult.vote_count,
     }))
 
-    this.setState({upcomingMoviesData: updatedData})
+    this.setState({upcomingMoviesData: updatedData, isLoading: false})
   }
 
   toggleMenubar = () => {
@@ -65,6 +70,7 @@ class UpcomingMovies extends Component {
       isMenubarOpen,
       isSearchOpen,
       searchInput,
+      isLoading,
     } = this.state
 
     const getFilteredUpcomingMovies = upcomingMoviesData.filter(eachMovie =>
@@ -82,12 +88,20 @@ class UpcomingMovies extends Component {
           onChangeSearchInput={this.onChangeSearchInput}
         />
         <div className="upcoming-movies-container">
-          <h1 className="upcoming-movies-heading">Upcoming Movies</h1>
-          <ul className="upcoming-movies-list-container">
-            {getFilteredUpcomingMovies.map(eachMovie => (
-              <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
-            ))}
-          </ul>
+          {isLoading ? (
+            <div className="loader-container">
+              <Loader type="TailSpin" color="#ffffff" height={50} width={50} />
+            </div>
+          ) : (
+            <>
+              <h1 className="upcoming-movies-heading">Upcoming Movies</h1>
+              <ul className="upcoming-movies-list-container">
+                {getFilteredUpcomingMovies.map(eachMovie => (
+                  <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </>
     )

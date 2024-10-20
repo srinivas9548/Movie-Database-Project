@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 
 import {IoSearch, IoMenu, IoClose} from 'react-icons/io5'
 
@@ -12,7 +12,12 @@ const Header = props => {
     toggleSearchbar,
     searchInput,
     onChangeSearchInput,
+    location,
   } = props
+
+  //   console.log(location)
+
+  const getActiveClass = path => (location.pathname === path ? 'active' : '')
 
   return (
     <nav className="nav-header">
@@ -25,13 +30,17 @@ const Header = props => {
         <div className="nav-desktop-container">
           <ul className="nav-item-container">
             <Link to="/" className="nav-link">
-              <li className="nav-item">Popular</li>
+              <li className={`nav-item ${getActiveClass('/')}`}>Popular</li>
             </Link>
             <Link to="/top-rated" className="nav-link">
-              <li className="nav-item">Top Rated</li>
+              <li className={`nav-item ${getActiveClass('/top-rated')}`}>
+                Top Rated
+              </li>
             </Link>
             <Link to="/upcoming" className="nav-link">
-              <li className="nav-item">Upcoming</li>
+              <li className={`nav-item ${getActiveClass('/upcoming')}`}>
+                Upcoming
+              </li>
             </Link>
           </ul>
           <input
@@ -66,13 +75,17 @@ const Header = props => {
           <IoClose className="close-icon" onClick={toggleMenubar} />
           <ul className="menubar-item-container">
             <Link to="/" className="nav-link">
-              <li className="menubar-item">Popular</li>
+              <li className={`menubar-item ${getActiveClass('/')}`}>Popular</li>
             </Link>
             <Link to="/top-rated" className="nav-link">
-              <li className="menubar-item">Top Rated</li>
+              <li className={`menubar-item ${getActiveClass('/top-rated')}`}>
+                Top Rated
+              </li>
             </Link>
             <Link to="/upcoming" className="nav-link">
-              <li className="menubar-item">Upcoming</li>
+              <li className={`menubar-item ${getActiveClass('/upcoming')}`}>
+                Upcoming
+              </li>
             </Link>
           </ul>
         </div>
@@ -81,4 +94,4 @@ const Header = props => {
   )
 }
 
-export default Header
+export default withRouter(Header)

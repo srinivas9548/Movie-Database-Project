@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom'
+
 import './index.css'
 
 const MovieCard = props => {
@@ -12,6 +14,11 @@ const MovieCard = props => {
       <img src={imageUrl} alt={id} className="movie-image" />
       <p className="movie-title">{title}</p>
       <p className="movie-rating">Rating: {voteAverage.toFixed(1)}</p>
+      <Link to={`/movie/${id}`}>
+        <button type="button" className="view-details-btn">
+          View Details
+        </button>
+      </Link>
     </li>
   )
 }

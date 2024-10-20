@@ -1,5 +1,9 @@
 import {Component} from 'react'
 
+import Loader from 'react-loader-spinner'
+
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+
 import Header from '../Header'
 import MovieCard from '../MovieCard'
 
@@ -11,6 +15,7 @@ class Home extends Component {
     isMenubarOpen: false,
     isSearchOpen: false,
     searchInput: '',
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -40,7 +45,7 @@ class Home extends Component {
       voteCount: eachResult.vote_count,
     }))
 
-    this.setState({moviesData: updatedData})
+    this.setState({moviesData: updatedData, isLoading: false})
   }
 
   toggleMenubar = () => {
@@ -62,7 +67,13 @@ class Home extends Component {
   //   console.log(moviesData)
 
   render() {
-    const {moviesData, isMenubarOpen, isSearchOpen, searchInput} = this.state
+    const {
+      moviesData,
+      isMenubarOpen,
+      isSearchOpen,
+      searchInput,
+      isLoading,
+    } = this.state
     // console.log(moviesData)
     const getFilteredMovies = moviesData.filter(eachMovie =>
       eachMovie.title.toLowerCase().includes(searchInput.toLowerCase()),
@@ -79,12 +90,20 @@ class Home extends Component {
           onChangeSearchInput={this.onChangeSearchInput}
         />
         <div className="popular-movies-container">
-          <h1 className="popular-movies-heading">Popular Movies</h1>
-          <ul className="movies-list-container">
-            {getFilteredMovies.map(eachMovie => (
-              <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
-            ))}
-          </ul>
+          {isLoading ? (
+            <div className="loader-container">
+              <Loader type="Oval" color="#ffffff" height={50} width={50} />
+            </div>
+          ) : (
+            <>
+              <h1 className="popular-movies-heading">Popular Movies</h1>
+              <ul className="movies-list-container">
+                {getFilteredMovies.map(eachMovie => (
+                  <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </>
     )

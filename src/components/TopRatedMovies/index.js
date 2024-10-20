@@ -1,5 +1,9 @@
 import {Component} from 'react'
 
+import Loader from 'react-loader-spinner'
+
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+
 import Header from '../Header'
 import MovieCard from '../MovieCard'
 
@@ -11,6 +15,7 @@ class TopRatedMovies extends Component {
     isMenubarOpen: false,
     isSearchOpen: false,
     searchInput: '',
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -40,7 +45,7 @@ class TopRatedMovies extends Component {
       voteCount: eachResult.vote_count,
     }))
 
-    this.setState({topRatedMoviesData: updatedData})
+    this.setState({topRatedMoviesData: updatedData, isLoading: false})
   }
 
   toggleMenubar = () => {
@@ -65,6 +70,7 @@ class TopRatedMovies extends Component {
       isMenubarOpen,
       isSearchOpen,
       searchInput,
+      isLoading,
     } = this.state
 
     const getFilteredTopMovies = topRatedMoviesData.filter(eachMovie =>
@@ -82,12 +88,20 @@ class TopRatedMovies extends Component {
           onChangeSearchInput={this.onChangeSearchInput}
         />
         <div className="top-rated-movies-container">
-          <h1 className="top-rated-movies-heading">Top Rated Movies</h1>
-          <ul className="top-rated-movies-list-container">
-            {getFilteredTopMovies.map(eachMovie => (
-              <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
-            ))}
-          </ul>
+          {isLoading ? (
+            <div className="loader-container">
+              <Loader type="Oval" color="#ffffff" height={50} width={50} />
+            </div>
+          ) : (
+            <>
+              <h1 className="top-rated-movies-heading">Top Rated Movies</h1>
+              <ul className="top-rated-movies-list-container">
+                {getFilteredTopMovies.map(eachMovie => (
+                  <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </>
     )
